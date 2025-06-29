@@ -1,0 +1,26 @@
+services:
+  nginx:
+    image: nginx:alpine
+    container_name: nginx
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - ./nginx/certs:/etc/nginx/certs
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - apache
+    networks:
+      - web
+
+  apache:
+    image: httpd:alpine
+    container_name: apache
+    volumes:
+      - ./apache:/usr/share/apache2/htdocs/
+    networks:
+      - web
+
+networks:
+  web:
+    driver: bridge
